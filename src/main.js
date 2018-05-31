@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Vcalendar from "./lib/index.js"
+// import vCalendar from "./lib/index.js"
 
-Vue.use(Vcalendar)
+// Vue.use(vCalendar)
 new Vue({
   el: '#app',
   render: h => h(App)

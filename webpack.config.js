@@ -6,8 +6,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'build.js',
-    library: "VueCalendars",
+    filename: 'vue-calendars.js',
+    library: "vCalendar",
     libraryTarget: "umd",
     umdNamedDefine: true
   },
