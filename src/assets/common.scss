@@ -1,0 +1,191 @@
+@charset "utf-8";
+@import "./reset.scss";
+@mixin full {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+@mixin place($pos) {
+    position: $pos;
+}
+@mixin radius($W) {
+    border-radius: $W;
+}
+html,
+body {
+    @include full;
+}
+html {
+    -ms-touch-action: none;
+}
+body {
+    background: #f4f4f4;
+}
+#app {
+    @include full;
+    &> div {
+        @include full;
+        display: box;
+        display: -webkit-box;
+        display: -moz-box;
+        box-orient: vertical;
+        -moz-box-orient: vertical;
+        -webkit-box-orient: vertical;
+    }
+}
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+.calendar {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    display: box;
+    display: -webkit-box;
+    display: -moz-box;
+    box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-box-orient: vertical;
+    .calendaWrap {
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        box-flex: 1;
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1;
+    }
+}
+.active {
+    /*px*/
+    height: 86px;
+    color: #FFFFFF;
+    background-color: #37B7FA;
+    border: 1px solid #FFFFFF;
+    .nums{
+        color: antiquewhite !important;
+    }
+}
+
+.calendar-list {
+    background-color: #fff;
+}
+
+.calendar {
+    padding-top: 0.27rem;
+    font-size: 12.85px !important;
+    .typeChoose{
+        position: absolute;
+        width: 50%;
+        height: 50px;
+        color: rgb(0, 0, 0);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        border: 1px solid rgb(125, 125, 125);
+        box-shadow: 0 0px 5px 1px rgb(111, 111, 111);
+        button {
+            width: 30%;
+            height: 1.5;
+            background-color: rgb(255,255,255);
+            border: 1px solid rgb(0, 0, 0);
+            border-radius: 5px;
+        }
+    }
+}
+
+.redText{
+    color: rgb(255,0,0);
+}
+
+.week {
+    position: fixed;
+    z-index: 50;
+    width: 100%;
+    background: #F9F8F8;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    .weekend{
+        color: rgb(200,200,200);
+    }
+    li {
+        text-align: center;
+        height: 40px;
+        line-height: 40px;
+        vertical-align: middle;
+        font-size: 25.7px;
+        /*px*/
+        font-weight: medium;
+    }
+}
+
+.calendar-item {
+    &:nth-of-type(1) {
+        margin-top: 40px;
+    }
+    padding-bottom: 0.1rem;
+    .calendar-header {
+        text-align: center;
+        font-size: 28px;
+        /*px*/
+        color: #333333;
+        font-weight: medium;
+        padding: 20px 0 10px 0;
+    }
+    .calendar-body {
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            li {
+                text-align: center;
+                height: 55px;
+                vertical-align: middle;
+                border: none;
+                font-weight: medium;
+                color: #797979;
+                width: 14.28%;
+                background-color: #fff;
+                position: relative;
+                div {
+                    /*px*/
+                    height: 100%;
+                    .todayText {
+                        font-size: 12px;
+
+                    }
+                    span {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 12px;
+                        /*px*/
+                        height: 33.3%;
+                        line-height: 1;
+                    }
+                    i {
+                        font-size: 12.8px;
+                        /*px*/
+                        display: block;
+                        height: 33.3%;
+                        line-height: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .nums {
+                        color: #37B7FA;
+                    }
+                }
+            }
+            span[class=disabled] {
+                color: #CCCCCC;
+            }
+        }
+    }
+}
