@@ -15,7 +15,6 @@
     "url": "git+https://github.com/limintao/vue-calendars.git"
   },
   "dependencies": {
-    "gitment": "0.0.3",
     "vue": "^2.5.11"
   },
   "browserslist": [
