@@ -161,4 +161,4 @@ subscript | 所有日期的下标
 items-subscrip | 选择哪些日期不可选，或哪些日期的自定义下标
 submit-typ | 选择日期后的方法，仅多选可用
 
-有什么问题欢迎随时提Issues！😊
+* 有什么问题欢迎随时提Issues！😊
