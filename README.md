@@ -57,7 +57,7 @@ or register locally in your .vue file
         <span class="select">请选择></span>
     </div>
     
-    <calendar-el 
+    <v-calendar 
         :option="option" 
         :click-action="setCurrentDate" 
         :select-date="currentDate"
@@ -65,7 +65,7 @@ or register locally in your .vue file
         :subscript="subscript"
         :items-subscript="itemsSubscript"
         :submit-type="submitType"
-        ></calendar-el>
+        ></v-calendar>
     
   </div>
 </template>
@@ -78,6 +78,7 @@ export default {
         option: {
             open: false,  //是否打开日历📅；
             aroud: 12, //显示多少月的数据
+            title: '选择出行日期'
         },
         currentDate: [],    //当前选择的日期
         isMultiple: false, //是否多选，false单选、true多选
@@ -101,13 +102,14 @@ export default {
   computed: {
         getCurrentDate() {
             let d = this.currentDate;
-            for(let i = 0 ; i < d.length ; i ++)
+            for(let i = 0 ; i < d.length ; i ++){
                 if (d) {
                     return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
                 } else {
                     d = new Date();
                     return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
                 }
+            }
         }
     },
   methods:{

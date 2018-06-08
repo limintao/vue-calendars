@@ -1,7 +1,7 @@
 {
   "name": "vue-calendars",
   "description": "A simple calendar selection component based on vue. Js!",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "author": "limintao",
   "main": "dist/vue-calendars.js",
   "license": "MIT",
