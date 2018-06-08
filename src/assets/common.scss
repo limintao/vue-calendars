@@ -1,38 +1,11 @@
 @charset "utf-8";
 @import "./reset.scss";
-@mixin full {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-}
+
 @mixin place($pos) {
     position: $pos;
 }
 @mixin radius($W) {
     border-radius: $W;
-}
-html,
-body {
-    @include full;
-}
-html {
-    -ms-touch-action: none;
-}
-body {
-    background: #f4f4f4;
-}
-#app {
-    @include full;
-    &> div {
-        @include full;
-        display: box;
-        display: -webkit-box;
-        display: -moz-box;
-        box-orient: vertical;
-        -moz-box-orient: vertical;
-        -webkit-box-orient: vertical;
-    }
 }
 .buttons {
     display: flex;
@@ -41,46 +14,117 @@ body {
 .calendar {
     width: 100%;
     height: 100%;
+    position: fixed; 
+    z-index: 999; 
+    bottom: 0px;
     overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-    display: box;
-    display: -webkit-box;
-    display: -moz-box;
-    box-orient: vertical;
-    -moz-box-orient: vertical;
-    -webkit-box-orient: vertical;
+    display: flex;
+    align-items: flex-end;
+    background-color: rgba(0, 0, 0, .75);
     .calendaWrap {
         width: 100%;
-        height: 100%;
-        overflow-x: hidden;
-        overflow-y: scroll;
-        box-flex: 1;
-        -webkit-box-flex: 1;
-        -moz-box-flex: 1;
+        height: 80%;
+        overflow: hidden;
+        border-radius: .1rem .1rem 0 0;
+        .submit-view {
+            width: 100%;
+            background-color: rgb(255,255,255);
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: .2rem 0;
+            div {
+                &:first-child {
+                    flex: 1;
+                    span {
+                        font-size: .28rem;
+                        color: rgb(246, 184, 13);
+                        
+                    }
+                }
+                &:nth-child(2) {
+                    flex: 3;
+                    span {
+                        font-size: .32rem;
+                    }
+                }
+                &:last-child {
+                    flex: 1;
+                    span {
+                        font-size: .28rem;
+                        color: rgb(255,255,255);
+                        background-color: rgb(246, 184, 13);
+                        padding: .10rem .18rem;
+                        border-radius: .28rem;
+                    }
+                }
+                
+            }
+        }
+        .weekly {
+            width: 100%;
+            background-color: rgb(255,255,255);
+            padding: .24rem;
+            .week {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                li {
+                    font-size: .24rem;
+                    color: rgb(39, 39, 39);
+                }
+            }
+        }
     }
 }
 .active {
-    /*px*/
-    height: 86px;
-    color: #FFFFFF;
-    background-color: #37B7FA;
-    border: 1px solid #FFFFFF;
+    height: .86rem;
+    color: rgb(255,255,255);
+    background-color: rgb(246, 184, 13);
+    border-radius: .5rem;
+    .todayText {
+        color: rgb(255,255,255);
+    }
+    .iconfont {
+        text-align: center;
+        &::before {
+            content: "✔";
+            width: 80%;
+            height: 80%;
+            font-size: .24rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(246, 184, 13);
+            background-color: rgb(255,255,255);
+            border-radius: 50%;
+        }
+        + span {
+            color: rgb(255,255,255) !important;
+        }
+    }
     .nums{
-        color: antiquewhite !important;
+        color: rgb(255,255,255) !important;
     }
 }
 
 .calendar-list {
-    background-color: #fff;
+    background-color: rgb(255,255,255);
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    margin-top: -1px;
 }
 
 .calendar {
     padding-top: 0.27rem;
-    font-size: 12.85px !important;
+    font-size: .32rem !important;
     .typeChoose{
         position: absolute;
         width: 50%;
-        height: 50px;
+        height: .5rem;
         color: rgb(0, 0, 0);
         display: flex;
         flex-direction: row;
@@ -93,99 +137,95 @@ body {
             height: 1.5;
             background-color: rgb(255,255,255);
             border: 1px solid rgb(0, 0, 0);
-            border-radius: 5px;
+            border-radius: .05rem;
         }
     }
 }
 
-.redText{
-    color: rgb(255,0,0);
-}
-
-.week {
-    position: fixed;
-    z-index: 50;
-    width: 100%;
-    background: #F9F8F8;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    .weekend{
-        color: rgb(200,200,200);
-    }
-    li {
-        text-align: center;
-        height: 40px;
-        line-height: 40px;
-        vertical-align: middle;
-        font-size: 25.7px;
-        /*px*/
-        font-weight: medium;
-    }
-}
-
 .calendar-item {
-    &:nth-of-type(1) {
-        margin-top: 40px;
-    }
-    padding-bottom: 0.1rem;
     .calendar-header {
         text-align: center;
-        font-size: 28px;
-        /*px*/
-        color: #333333;
+        font-size: .32rem;
+        height: .88rem;
+        color: rgb(39, 39, 39);
         font-weight: medium;
-        padding: 20px 0 10px 0;
+        line-height: .88rem;
+        background-color: rgb(249, 249, 251);
     }
     .calendar-body {
+        padding: 0 .24rem;
         ul {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
             li {
                 text-align: center;
-                height: 55px;
-                vertical-align: middle;
+                height: 1.34rem;
                 border: none;
                 font-weight: medium;
                 color: #797979;
                 width: 14.28%;
+                margin: .16rem 0;
                 background-color: #fff;
                 position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 div {
-                    /*px*/
                     height: 100%;
+                    width: auto;
+                    padding: .05rem .1rem;
                     .todayText {
-                        font-size: 12px;
-
+                        font-size: .20rem;
+                        + span {
+                            color: rgb(39, 39, 39);
+                        }
                     }
                     span {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        font-size: 12px;
-                        /*px*/
+                        font-size: .32rem;
                         height: 33.3%;
                         line-height: 1;
                     }
                     i {
-                        font-size: 12.8px;
-                        /*px*/
+                        font-size: .2rem;
                         display: block;
                         height: 33.3%;
                         line-height: 1;
                         display: flex;
                         align-items: center;
                         justify-content: center;
+                        + span {
+                            color: rgb(39, 39, 39);
+                        }
                     }
                     .nums {
-                        color: #37B7FA;
+                        font-size: .2rem;
+                        color: rgb(117, 203, 189);
                     }
                 }
             }
             span[class=disabled] {
-                color: #CCCCCC;
+                color: rgb(220, 224, 231);
+                + .nums {
+                    color: rgb(249, 140, 140);
+                }
             }
         }
     }
+}
+
+.redText{
+    color: rgb(249, 140, 140);
+}
+.fade-enter-active {
+  transition: opacity .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.fade-leave-active {
+    transition: opacity .5s ease;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }

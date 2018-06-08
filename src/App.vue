@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
+		<p @click="openCalendar">选择日期：{{ getCurrentDate }}</p>
     <v-calendar :option="option" 
 					:click-action="setCurrentDate" 
 					:select-date="currentDate"
@@ -10,29 +8,16 @@
 					:subscript="subscript"
 					:items-subscript="itemsSubscript"
 					:submit-type="submitType"
-					:selected-component="selectedComponent"></v-calendar>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+					:selected-component="selectedComponent">
+		</v-calendar>
   </div>
 </template>
 
 <script>
 export default {
   name: 'app',
- data () {
+  data () {
     return {
-      msg: "撒很快就安徽省考虑的撒",
       option: {
 				open: false,
 				aroud: 12, //12个月
@@ -108,6 +93,14 @@ export default {
 </script>
 
 <style lang="scss">
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-size:  calc(100vw/7.5);
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

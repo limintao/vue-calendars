@@ -1,17 +1,26 @@
 <template>
-	<div class="calendar" :style="{display: option.open?'block':'none'}" style="position: fixed; z-index: 999; bottom: 0px;">
+<transition name="fade">
+	<div class="calendar" v-if="option.open" >
 		<div class="calendaWrap">
-			<div class="calendar-list">
+			<div class="submit-view">
+				<div><span @click="option.open = false">取消</span></div>
+				<div><span>{{ option.title || '选择日期' }}</span></div>
+				<div><span @click="complete">确认</span></div>
+			</div>
+			<div class="weekly">
 				<ul class="week">
-					<li class="weekend">日</li>
+					<li>日</li>
 					<li>一</li>
 					<li>二</li>
 					<li>三</li>
 					<li>四</li>
 					<li>五</li>
-					<li class="weekend">六</li>
+					<li>六</li>
 				</ul>
-				<div class="calendar">
+			</div>
+			<div class="calendar-list">
+				
+				<div class="calendar-content">
 					<div class="calendar-item" v-for="(date,index) in dateArr" :key="index">
 						<div class="calendar-header">
 							<span>{{date.y}}年{{date.m}}月</span>
@@ -28,7 +37,7 @@
 										<i class="nums">{{ isCurrentDay(day) || subscript }}</i>
 									</div>
 									<div v-else :class="{active: chooseDate.indexOf(day) === -1 ? false : true}">
-										<span class='todayText redText'></span>
+										<i class="iconfont"></i>
 										<template v-if="day<new Date() || isCurrentDay(day)">
 											<span class="disabled">{{ day.getDate() }}</span>
 										</template>
@@ -54,6 +63,7 @@
 			</div>
 		</div>
 	</div>
+</transition>
 </template>
 <script>
 export default {
@@ -76,9 +86,9 @@ export default {
 			showAlert: false
 		}
 	},
-	props: ['option', 'clickAction', 'selectDate',"submitType","multiSelection","subscript","itemsSubscript"],
+	props: ['option', 'clickAction', 'selectDate',"submitType","multiSelection","subscript","itemsSubscript","title"],
 	created() {
-		for (let x = 0; x < this.option.aroud; x++) {
+		for (let x = 0; x < (this.option.aroud || 12); x++) {
 			let days = this.calendarInit(this.currentDate.currentYear, this.currentDate.currentMonth ,x);
 			let timeObj = {
 				y: this.currentDate.currentYear,
@@ -98,26 +108,6 @@ export default {
 				d = i.date.replace(/\-\//g,",")
 				if(day.getFullYear() == new Date(i.date).getFullYear() && day.getMonth() == new Date(i.date).getMonth() && day.getDate() == new Date(i.date).getDate()){
 					return i.title
-				}
-			}
-			
-			// if (value) {
-				// return day.getFullYear() == d.getFullYear() && day.getMonth() == d.getMonth() && day.getDate() == d.getDate() ? true : false;
-			// } else {
-				// return day.getFullYear() == new Date().getFullYear() && day.getMonth() == new Date().getMonth() && day.getDate() == new Date().getDate() ? true : false;
-			// }	
-		
-			
-		},
-		getNum(date) {
-			let lastDay = this.nums.length && this.nums[this.nums.length - 1].reTravelDate;
-			let day = this.formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
-			if (day > lastDay) {
-				return '';
-			}
-			for (let x in this.nums) {
-				if (this.nums[x].reTravelDate == day) {
-					return '剩' + this.nums[x].availableAmount + '人';
 				}
 			}
 		},
@@ -160,7 +150,6 @@ export default {
 						this.typeAlert.y = event.pageY - (dayHeight * 1.5);
 					}
 					this.showAlert = true;
-					// console.log(event.pageY - (dayHeight / 2),this.typeAlert.y)
 				}else{
 					let flag = true;
 					this.chooseDate.forEach((element,key) => {
@@ -181,10 +170,11 @@ export default {
 				}
 				
 			}
-			
-			if(!this.multiSelection){
+		},
+		complete () {
+			if (!this.multiSelection){
 				this.clickAction(this.chooseDate);
-			};
+			}
 		},
 		submitEve(){
 			this.showAlert = false;
