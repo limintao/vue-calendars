@@ -86,7 +86,7 @@ export default {
 			showAlert: false
 		}
 	},
-	props: ['option', 'clickAction', 'selectDate',"submitType","multiSelection","subscript","itemsSubscript","title"],
+	props: ['option', 'clickAction', "submitType", "multiSelection", "subscript", "itemsSubscript", "title"],
 	created() {
 		for (let x = 0; x < (this.option.aroud || 12); x++) {
 			let days = this.calendarInit(this.currentDate.currentYear, this.currentDate.currentMonth ,x);
@@ -100,6 +100,20 @@ export default {
 		
 	
 	},
+	computed: {
+      getCurrentDate() {
+			let d = this.chooseDate;
+			console.log(d);
+            for(let i = 0 ; i < d.length ; i ++) {
+                if (d) {
+                    return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
+                } else {
+                    d = new Date();
+                    return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
+                }
+            }  
+        }
+  	},
 	methods: {
 		isCurrentDay(day) {
 			let d = "";
@@ -173,12 +187,14 @@ export default {
 		},
 		complete () {
 			if (!this.multiSelection){
-				this.clickAction(this.chooseDate);
+				this.clickAction(this.getCurrentDate);
+				this.option.open = false;
 			}
 		},
 		submitEve(){
 			this.showAlert = false;
 			this.submitType(this.chooseDate);
+			this.option.open = false;
 		},
 		formatDate(year, month, day) {
 			let y = year;
@@ -217,5 +233,4 @@ export default {
 </script>
 <style lang="scss">
 @import "../assets/common.scss";
-	
 </style>
