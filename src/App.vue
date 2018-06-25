@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-		<p @click="openCalendar">选择日期：{{ getCurrentDate }}</p>
+		<p @click="openCalendar">选择日期：{{ currentDate }}</p>
     <v-calendar :option="option" 
 					:click-action="setCurrentDate" 
 					:select-date="currentDate"
@@ -8,7 +8,7 @@
 					:subscript="subscript"
 					:items-subscript="itemsSubscript"
 					:submit-type="submitType"
-					:selected-component="selectedComponent">
+					>
 		</v-calendar>
   </div>
 </template>
@@ -22,9 +22,7 @@ export default {
 				open: false,
 				aroud: 12, //12个月
 			},
-			currentDate: [],//当前选择的日期
-			pepoleNum: 10,
-			cardNum: 10,
+			currentDate: '',//当前选择的日期
 			isMultiple: false,
 			subscript: "可约",
 			itemsSubscript:[
@@ -40,53 +38,23 @@ export default {
 					date: '2018,06,22',
 					title: '不可休',
 				}
-			],
-			selectedComponent: ""
+			]
     }
   },
-  computed: {
-	
-		getCurrentDate() {
-			let d = this.currentDate;
-			for(let i = 0 ; i < d.length ; i ++)
-				if (d) {
-					return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
-				} else {
-					d = new Date();
-					return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
-				}
-		}
-	},
   created:function(){
       
   },
   methods:{
     openCalendar() {
-			this.getCalendarAndMum();
 			this.option.open = true;
-		},
-		closeCalendar() {
-			this.option.open = false;
-		},
-		formatDate(year, month, day) {
-			let y = year;
-			let m = month;
-			if (m < 10) m = "0" + m;
-			let d = day;
-			if (d < 10) d = "0" + d;
-			return y + "-" + m + "-" + d
 		},
 		setCurrentDate(d) {
 			this.currentDate= d;//
-			this.closeCalendar();
-		},
-		getCalendarAndMum() {
-			//此处可以获取数据  比如获取对应日期的人数
+			console.log(d);
+			
 		},
 		submitType(type){
-			console.log(type);
 			this.currentDate = '';
-			this.closeCalendar();
 		}
   }
 }

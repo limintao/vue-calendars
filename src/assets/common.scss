@@ -34,6 +34,8 @@
             justify-content: space-between;
             padding: .2rem 0;
             div {
+                display: flex;
+                justify-content: center;
                 &:first-child {
                     flex: 1;
                     span {
@@ -79,13 +81,16 @@
         }
     }
 }
-.active {
-    height: .86rem;
+.calendar-body > .days .active {
+    height: 100%;
     color: rgb(255,255,255);
     background-color: rgb(246, 184, 13);
     border-radius: .5rem;
     .todayText {
         color: rgb(255,255,255);
+        + span {
+            color: rgb(255,255,255) !important;
+        }
     }
     .iconfont {
         text-align: center;

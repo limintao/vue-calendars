@@ -52,19 +52,16 @@ or register locally in your .vue file
 <template>
   <div class="hello">
     <div class="chooseView" @click="openCalendar">
-        <span class="item">选择日期</span>
-        <span class="result">{{getCurrentDate}}</span>
-        <span class="select">请选择></span>
+        <span class="item">选择日期：</span>
+        <span class="result">{{ currentDate }}</span>
     </div>
     
     <v-calendar 
         :option="option" 
-        :click-action="setCurrentDate" 
-        :select-date="currentDate"
+        :click-action="setCurrentDate"
         :multi-selection="isMultiple"
         :subscript="subscript"
         :items-subscript="itemsSubscript"
-        :submit-type="submitType"
         ></v-calendar>
     
   </div>
@@ -99,52 +96,17 @@ export default {
         ]
     }
   },
-  computed: {
-        getCurrentDate() {
-            let d = this.currentDate;
-            for(let i = 0 ; i < d.length ; i ++){
-                if (d) {
-                    return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
-                } else {
-                    d = new Date();
-                    return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
-                }
-            }
-        }
-    },
+  
   methods:{
     openCalendar() {
         this.option.open = true;
     },
-    closeCalendar() {
-        this.option.open = false;
-    },
-    formatDate(year, month, day) {
-        let y = year;
-        let m = month;
-        if (m < 10) m = "0" + m;
-        let d = day;
-        if (d < 10) d = "0" + d;
-        return y + "-" + m + "-" + d
-    },
     setCurrentDate(d) {   //设置点击的日期
-        this.currentDate= d;//
-        this.closeCalendar();
-    },
-    submitType(type){
-        this.currentDate = '';
-        this.closeCalendar();
+        this.currentDate= d;
     }
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style >
-	.chooseView{
-        width: 100%;
-    }
-</style>
 ```
 
 A sample screenshot is here, 
@@ -157,7 +119,7 @@ Option  | Description
 ---|---
 option | 传入一组object aroud(当前日期),如当前日期为2018/04/25 around为3 则显示2018/04 2018/05 2018/06 3个月；open(是否显示日历)，true(显示) or false（隐藏）; title(要显示的标题), string
 click-action | 选择日期之后执行的方法，可接方法名
-select-date | 选择日期高亮
+<!-- select-date | 选择日期高亮 -->
 multi-selection | 是否多选,true(多选) or false(单选)
 subscript | 所有日期的下标
 items-subscrip | 选择哪些日期不可选，或哪些日期的自定义下标
