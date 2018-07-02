@@ -115,7 +115,7 @@ A sample screenshot is here,
 
 ## Options
 
-Option  | Description
+Option      | Description
 ---  | ---
 option   | 传入一组object aroud(当前日期),如当前日期为2018/04/25 around为3 则显示2018/04 2018/05 2018/06 3个月；open(是否显示日历)，true(显示) or false（隐藏）; title(要显示的标题), string
 click-action   | 选择日期之后执行的方法，可接方法名
