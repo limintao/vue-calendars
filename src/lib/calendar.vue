@@ -3,9 +3,9 @@
 	<div class="calendar" v-if="option.open" >
 		<div class="calendaWrap">
 			<div class="submit-view">
-				<div><span @click="option.open = false">取消</span></div>
+				<div><span @click="cancel()">取消</span></div>
 				<div><span>{{ option.title || '选择日期' }}</span></div>
-				<div><span @click="complete">确认</span></div>
+				<div><span @click="complete()">确认</span></div>
 			</div>
 			<div class="weekly">
 				<ul class="week">
@@ -28,23 +28,23 @@
 						<div class="calendar-body">
 							<ul class="days">
 								<li v-for="(day,index) in date.days" :key="index">
-									<div v-if="day.getMonth()+1 != date.m">
+									<div v-if="day.m + 1 != date.m">
 										<span></span>
 									</div>
-									<div v-else-if="isToday(day)" @click="clickAction(day)"  :class="{active: chooseDate.indexOf(day) === -1 ? false : true}">
+									<div v-else-if="isToday(day)" @click="clickAction(day)"  :class="{active: JSON.stringify(clickIndex).indexOf(JSON.stringify(day)) != -1}">
 										<span class='todayText redText'>{{ '今天' }}</span>
-										<span @click="clickChoose(day,$event)">{{ day.getDate() }}</span>
+										<span @click="clickChoose(day,$event,index)">{{ day.d }}</span>
 										<i class="nums">{{ isCurrentDay(day) || subscript }}</i>
 									</div>
-									<div v-else :class="{active: chooseDate.indexOf(day) === -1 ? false : true}">
+									<div v-else :class="{active: JSON.stringify(clickIndex).indexOf(JSON.stringify(day)) != -1}">
 										<i class="iconfont"></i>
-										<template v-if="day<new Date() || isCurrentDay(day)">
-											<span class="disabled">{{ day.getDate() }}</span>
+										<template v-if="new Date(day.y, day.m, day.d) < new Date() || isCurrentDay(day)">
+											<span class="disabled">{{ day.d }}</span>
 										</template>
 										<template v-else>
-											<span @click="clickChoose(day,$event)">{{ day.getDate() }}</span>
+											<span @click="clickChoose(day,$event,index)">{{ day.d }}</span>
 										</template>
-										<template v-if="day > new Date()">
+										<template v-if="new Date(day.y, day.m, day.d) > new Date()">
 											<i class="nums">{{ isCurrentDay(day) || subscript }}</i>
 										</template>	
 									</div>
@@ -52,13 +52,11 @@
 							</ul>
 						</div>
 					</div>
-					<div v-if="multiSelection" class="typeChoose" 
+					<!-- <div v-if="multiSelection" class="typeChoose" 
 						:style="{display: showAlert ? 'flex' : 'none',top: typeAlert.y + 'px',left: typeAlert.x + 'px'}"
 						>
-						<button @click="submitType(chooseDate)">请假</button>
-						<button @click="submitType(chooseDate)">休假</button>
-						<button @click="chooseDate = [];showAlert = false">取消</button>
-					</div>
+						<slot name="operating"></slot>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -77,16 +75,16 @@ export default {
 				currentWeek: null
 			},
 			dateArr: [],
-			clickNums: 0,
+			clickIndex: [],
 			chooseDate: [],
 			typeAlert: {
 				x: 100,
 				y: 50
 			},
-			showAlert: false
+			// showAlert: false
 		}
 	},
-	props: ['option', 'clickAction', "submitType", "multiSelection", "subscript", "itemsSubscript", "title"],
+	props: ['option', 'clickAction', "multiSelection", "intervalSelection", "subscript", "itemsSubscript", "title"],
 	created() {
 		for (let x = 0; x < (this.option.aroud || 12); x++) {
 			let days = this.calendarInit(this.currentDate.currentYear, this.currentDate.currentMonth ,x);
@@ -97,21 +95,23 @@ export default {
 			};
 			this.dateArr.push(timeObj);
 		}
+	},
+	mounted() {
 		
-	
 	},
 	computed: {
       getCurrentDate() {
-			let d = this.chooseDate;
-			console.log(d);
-            for(let i = 0 ; i < d.length ; i ++) {
+			let [ ...d ] = this.chooseDate,
+				arr = [];
+            for(let i of d) {
                 if (d) {
-                    return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
+					arr.push(this.formatDate(i.y, i.m + 1, i.d));
                 } else {
-                    d = new Date();
-                    return this.formatDate(d[i].getFullYear(), d[i].getMonth() + 1, d[i].getDate());
-                }
-            }  
+                    let now = new Date();
+					arr.push(this.formatDate(now.getFullYear(), now.getMonth() + 1, now.getDate()));
+				}
+			}
+			return arr;
         }
   	},
 	methods: {
@@ -120,15 +120,15 @@ export default {
 
 			for(let i of this.itemsSubscript){
 				d = i.date.replace(/\-\//g,",")
-				if(day.getFullYear() == new Date(i.date).getFullYear() && day.getMonth() == new Date(i.date).getMonth() && day.getDate() == new Date(i.date).getDate()){
+				if(day.y == new Date(i.date).getFullYear() && day.m == new Date(i.date).getMonth() && day.d == new Date(i.date).getDate()){
 					return i.title
 				}
 			}
 		},
-		isToday(day) {
-			return day.getFullYear() == new Date().getFullYear() && day.getMonth() == new Date().getMonth() && day.getDate() == new Date().getDate() ? true : false;
+		isToday(day) {    // 判断是否是今天
+			return day.y == new Date().getFullYear() && day.m == new Date().getMonth() && day.d == new Date().getDate() ? true : false;
 		},
-		getDay(date) {
+		getDay(date) {     // 获取天数
 			this.currentDate.currentDay = date.getDate();
 			this.currentDate.currentYear = date.getFullYear();
 			this.currentDate.currentMonth = date.getMonth() + 1;
@@ -137,72 +137,80 @@ export default {
 				this.currentDate.currentWeek = 7;
 			}
 		},
-		clickChoose(day,event) {
-			let clientWidth = document.documentElement.clientWidth,
-				clientHeight = document.documentElement.clientHeight,
-				dayWidth = event.target.parentNode.offsetWidth,
-				dayHeight = event.target.parentNode.offsetHeight;
-			this.clickNums = this.chooseDate.length;
-			if(this.clickNums > 4){
-				alert("您的休假天数只剩4天，不能选择更多天数了！");
-				this.clickNums = 0;
-				this.chooseDate = [];
-				this.showAlert = false;
-			}else{
-				if(this.chooseDate.length === 0 ){
-					this.chooseDate.push(day);
-					if(event.pageX > (clientWidth / 2)){
-						this.typeAlert.x = (clientWidth / 2) - (dayWidth / 4);
-					}
-					if(event.pageY < (clientHeight / 4)){
-						this.typeAlert.y = event.pageY + (dayHeight / 2);
-					}
-					if(event.pageX < (clientWidth / 2)){
-						this.typeAlert.x = event.pageX - (dayWidth / 4);
-					}
-					if(event.pageY > (clientHeight / 4)){
-						this.typeAlert.y = event.pageY - (dayHeight * 1.5);
-					}
-					this.showAlert = true;
-				}else{
-					let flag = true;
+		clickChoose(day,event) {    //  点击日期的方法
+			if(this.chooseDate.length > 1 && this.intervalSelection){    //  如果选择天数的个数大于两，则算是重新选择开始时间
+				this.chooseDate = [];    // 清空选择的天数
+				this.clickIndex = [];     //  清空选择的下标
+				this.chooseDate.push(day);    //把新选择的天添加进去
+				this.clickIndex.push(day);   //  把新选的天的下标添加进去
+			}else{                              //  如果选择的天数不大于二
+				if(this.chooseDate.length === 0 ){     
+					this.chooseDate.push(day);   // 添加进去天
+					this.clickIndex.push(day);    // 添加进去天的下标
+				}else{							// 如果已选择一天的操作
 					this.chooseDate.forEach((element,key) => {
-						if(day === element){
-							flag = false;
-							this.chooseDate.splice(key,1);
-							if(this.currentDate.length < 1){
-								this.showAlert = false;
+						if(day === element){      // 如果所点的这一天和上次点的是同一天则取消选择
+							this.chooseDate.splice(key,1);     // 删除掉所选的天数
+							this.clickIndex.splice(key,1);      //  删除掉所选天的下标
+						}else if(!this.multiSelection && !this.intervalSelection){         //  如果所点的不是一天并且不是多选
+							this.chooseDate.splice(key,1,day);	//  替换掉当前值
+							this.clickIndex.splice(key,1,day);
+						}else if (this.multiSelection){      //  如果是多选，push进数组
+							this.chooseDate.push(day);
+							this.clickIndex.push(day);
+						}else if(this.intervalSelection){     //   如果是区域选择
+							let [ ...arr ] = this.clickIndex,
+								startTime = new Date(arr[0].y, arr[0].m, arr[0].d),
+								endTime = new Date(day.y, day.m, day.d);
+							if((endTime.getTime() - startTime.getTime()) < 0){     //   判断结束时间如果小于开始时间则把结束时间放在开始时间之前
+								startTime = endTime;
+								endTime = new Date(arr[0].y, arr[0].m, arr[0].d);
+								this.chooseDate.unshift(day);
+								this.clickIndex.unshift(day);
 							}
-						}
-						if(!this.multiSelection){
-							this.chooseDate.splice(key,1);
+							while( (endTime.getTime() - startTime.getTime()) > 0 ){
+								startTime.setDate(startTime.getDate() + 1);
+								((time) => {
+									this.clickIndex.push({
+										y: time.getFullYear(),
+										m: time.getMonth(),
+										d: time.getDate()
+									});
+								})(startTime);
+							}
+							this.chooseDate.push(day);
 						}
 					});
-					if(flag){
-						this.chooseDate.push(day);
-					}
+					
 				}
 				
 			}
 		},
-		complete () {
-			if (!this.multiSelection){
+		complete () {     //  点确认传递数据
+			if (this.intervalSelection){
+				if (this.chooseDate.length < 2){
+					alert("请选择结束日期！");
+				}else {
+					this.clickAction(this.getCurrentDate);
+					this.option.open = false;
+				}
+			}else {
 				this.clickAction(this.getCurrentDate);
 				this.option.open = false;
 			}
 		},
-		submitEve(){
-			this.showAlert = false;
-			this.submitType(this.chooseDate);
-			this.option.open = false;
-		},
-		formatDate(year, month, day) {
+		formatDate(year, month, day) {    //  日期格式化
 			let y = year;
 			let m = month;
 			if (m < 10) m = "0" + m;
 			let d = day;
 			if (d < 10) d = "0" + d;
 			return y + "-" + m + "-" + d
+		},
+		cancel(){     //  点击取消清空数据
+			this.option.open = false;
+			this.chooseDate = [];
+			this.clickIndex = [];
 		},
 		calendarInit(year, month, x) {
 			let date, d;
@@ -219,11 +227,21 @@ export default {
 			for (let i = this.currentDate.currentWeek - 1; i >= 0; i--) {
 				let d = new Date(this.currentDate.currentYear, this.currentDate.currentMonth - 1, this.currentDate.currentDay);
 				d.setDate(d.getDate() - i);
+				d = {
+					y: d.getFullYear(),
+					m: d.getMonth(),
+					d: d.getDate()
+				}
 				days.push(d);
 			}
 			for (let i = 1; i <= 42 - this.currentDate.currentWeek; i++) {
 				let d = new Date(this.currentDate.currentYear, this.currentDate.currentMonth - 1, this.currentDate.currentDay);
 				d.setDate(d.getDate() + i);
+				d = {
+					y: d.getFullYear(),
+					m: d.getMonth(),
+					d: d.getDate()
+				}
 				days.push(d);
 			}
 			return days;

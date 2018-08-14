@@ -1,13 +1,14 @@
 <template>
   <div id="app">
-		<p @click="openCalendar">选择日期：{{ currentDate }}</p>
+		<p @click="openCalendar">选择日期：{{ currentDate[0] }}</p>
+		<p>{{ currentDate[1] }}</p>
     <v-calendar :option="option" 
 					:click-action="setCurrentDate" 
 					:select-date="currentDate"
 					:multi-selection="isMultiple"
+					:interval-selection="isInterval"
 					:subscript="subscript"
 					:items-subscript="itemsSubscript"
-					:submit-type="submitType"
 					>
 		</v-calendar>
   </div>
@@ -24,18 +25,19 @@ export default {
 			},
 			currentDate: '',//当前选择的日期
 			isMultiple: false,
+			isInterval: false,
 			subscript: "可约",
 			itemsSubscript:[
 				{
-					date: '2018-05-31',
+					date: '2018-08-31',
 					title: '不可休',
 				},
 				{
-					date: '2018/06/01',
+					date: '2018/09/01',
 					title: '不可休',
 				},
 				{
-					date: '2018,06,22',
+					date: '2018,08,22',
 					title: '不可休',
 				}
 			]
@@ -49,12 +51,8 @@ export default {
 			this.option.open = true;
 		},
 		setCurrentDate(d) {
-			this.currentDate= d;//
+			this.currentDate = d;//
 			console.log(d);
-			
-		},
-		submitType(type){
-			this.currentDate = '';
 		}
   }
 }
