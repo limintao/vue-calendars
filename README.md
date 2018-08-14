@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/vue-calendars.svg?maxAge=2592000?style=flat-square)]()
 <!-- [![npm](https://img.shields.io/npm/dt/vue-fullcalendar.svg?maxAge=2592000?style=flat-square)]() -->
 
-> A simple calendar selection component based on vue.js!You can customize which day is not optional, or you can define subscripts for each day (or days). Single or multiple choice!
+> A simple calendar selection component based on vue.js!You can customize which day is not optional, or you can define subscripts for each day (or days). Single or multiple(/interval) choice!
 
 ## Getting Started
 
@@ -121,7 +121,6 @@ Option  | Description
 ---|---
 option | 传入一组object aroud(当前日期),如当前日期为2018/04/25 around为3 则显示2018/04 2018/05 2018/06 3个月；open(是否显示日历)，true(显示) or false（隐藏）; title(要显示的标题), string
 click-action | 选择日期之后执行的方法，可接方法名，返回的是一个包含日期的数组
-<!-- select-date | 选择日期高亮 -->
 multi-selection | 是否多选,true(多选) or false(单选)
 interval-selection | 是否区间选择，与多选冲突，如果同时设true则按多选操作
 subscript | 所有日期的下标
