@@ -24,7 +24,7 @@ export default {
 				aroud: 12, //12个月
 			},
 			currentDate: '',//当前选择的日期
-			isMultiple: false,
+			isMultiple: true,
 			isInterval: false,
 			subscript: "可约",
 			itemsSubscript:[

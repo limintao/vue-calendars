@@ -28,12 +28,12 @@
 						<div class="calendar-body">
 							<ul class="days">
 								<li v-for="(day,index) in date.days" :key="index">
-									<div v-if="day.m + 1 != date.m">
+									<div v-if="day.m + 1 !== date.m">
 										<span></span>
 									</div>
 									<div v-else-if="isToday(day)" @click="clickAction(day)"  :class="{active: JSON.stringify(clickIndex).indexOf(JSON.stringify(day)) != -1}">
 										<span class='todayText redText'>{{ '今天' }}</span>
-										<span @click="clickChoose(day,$event,index)">{{ day.d }}</span>
+										<span @click="clickChoose(day)">{{ day.d }}</span>
 										<i class="nums">{{ isCurrentDay(day) || subscript }}</i>
 									</div>
 									<div v-else :class="{active: JSON.stringify(clickIndex).indexOf(JSON.stringify(day)) != -1}">
@@ -42,7 +42,7 @@
 											<span class="disabled">{{ day.d }}</span>
 										</template>
 										<template v-else>
-											<span @click="clickChoose(day,$event,index)">{{ day.d }}</span>
+											<span @click="clickChoose(day)">{{ day.d }}</span>
 										</template>
 										<template v-if="new Date(day.y, day.m, day.d) > new Date()">
 											<i class="nums">{{ isCurrentDay(day) || subscript }}</i>
@@ -52,11 +52,6 @@
 							</ul>
 						</div>
 					</div>
-					<!-- <div v-if="multiSelection" class="typeChoose" 
-						:style="{display: showAlert ? 'flex' : 'none',top: typeAlert.y + 'px',left: typeAlert.x + 'px'}"
-						>
-						<slot name="operating"></slot>
-					</div> -->
 				</div>
 			</div>
 		</div>
@@ -80,8 +75,7 @@ export default {
 			typeAlert: {
 				x: 100,
 				y: 50
-			},
-			// showAlert: false
+			}
 		}
 	},
 	props: ['option', 'clickAction', "multiSelection", "intervalSelection", "subscript", "itemsSubscript", "title"],
@@ -100,7 +94,7 @@ export default {
 		
 	},
 	computed: {
-      getCurrentDate() {
+		getCurrentDate() {
 			let [ ...d ] = this.chooseDate,
 				arr = [];
             for(let i of d) {
@@ -137,53 +131,49 @@ export default {
 				this.currentDate.currentWeek = 7;
 			}
 		},
-		clickChoose(day,event) {    //  点击日期的方法
-			if(this.chooseDate.length > 1 && this.intervalSelection){    //  如果选择天数的个数大于两，则算是重新选择开始时间
-				this.chooseDate = [];    // 清空选择的天数
-				this.clickIndex = [];     //  清空选择的下标
-				this.chooseDate.push(day);    //把新选择的天添加进去
-				this.clickIndex.push(day);   //  把新选的天的下标添加进去
-			}else{                              //  如果选择的天数不大于二
-				if(this.chooseDate.length === 0 ){     
-					this.chooseDate.push(day);   // 添加进去天
-					this.clickIndex.push(day);    // 添加进去天的下标
-				}else{							// 如果已选择一天的操作
-					this.chooseDate.forEach((element,key) => {
-						if(day === element){      // 如果所点的这一天和上次点的是同一天则取消选择
-							this.chooseDate.splice(key,1);     // 删除掉所选的天数
-							this.clickIndex.splice(key,1);      //  删除掉所选天的下标
-						}else if(!this.multiSelection && !this.intervalSelection){         //  如果所点的不是一天并且不是多选
-							this.chooseDate.splice(key,1,day);	//  替换掉当前值
-							this.clickIndex.splice(key,1,day);
-						}else if (this.multiSelection){      //  如果是多选，push进数组
-							this.chooseDate.push(day);
-							this.clickIndex.push(day);
-						}else if(this.intervalSelection){     //   如果是区域选择
-							let [ ...arr ] = this.clickIndex,
-								startTime = new Date(arr[0].y, arr[0].m, arr[0].d),
-								endTime = new Date(day.y, day.m, day.d);
-							if((endTime.getTime() - startTime.getTime()) < 0){     //   判断结束时间如果小于开始时间则把结束时间放在开始时间之前
-								startTime = endTime;
-								endTime = new Date(arr[0].y, arr[0].m, arr[0].d);
-								this.chooseDate.unshift(day);
-								this.clickIndex.unshift(day);
-							}
-							while( (endTime.getTime() - startTime.getTime()) > 0 ){
-								startTime.setDate(startTime.getDate() + 1);
-								((time) => {
-									this.clickIndex.push({
-										y: time.getFullYear(),
-										m: time.getMonth(),
-										d: time.getDate()
-									});
-								})(startTime);
-							}
-							this.chooseDate.push(day);
+		clickChoose(day) {    //  点击日期的方法
+			if(this.chooseDate.length === 0) {
+				this.chooseDate.push(day);   // 添加进去天
+				this.clickIndex.push(day);    // 添加进去天的下标
+			}else {
+				if(this.chooseDate.length > 1 && this.intervalSelection){    //  如果选择天数的个数大于两，并且是区域选择,则算是重新选择开始时间
+					this.chooseDate = [];    // 清空选择的天数
+					this.clickIndex = [];     //  清空选择的下标
+					this.chooseDate.push(day);    //把新选择的天添加进去
+					this.clickIndex.push(day);   //  把新选的天的下标添加进去
+				}else if(this.multiSelection){							// 如果是多选
+					let isPush = this.clickIndex.filter((element,key) => {     // 过滤点击的天是否已是选中的
+						if(day === element) {
+							this.clickIndex.splice(key, 1);
+							return element;
 						}
-					});
-					
+					})
+					if(isPush.length <= 0) {            //  如果点击的天数不是已选中的天数就push进去
+						this.clickIndex.push(day);
+					}
+					this.chooseDate = this.clickIndex;
+				}else if(this.intervalSelection) {        // 如果是区域选择
+					let [ ...arr ] = this.clickIndex,
+						startTime = new Date(arr[0].y, arr[0].m, arr[0].d),
+						endTime = new Date(day.y, day.m, day.d);
+					if((endTime.getTime() - startTime.getTime()) < 0){     //   判断结束时间如果小于开始时间则把结束时间放在开始时间之前
+						startTime = endTime;
+						endTime = new Date(arr[0].y, arr[0].m, arr[0].d);
+						this.chooseDate.unshift(day);
+						this.clickIndex.unshift(day);
+					}
+					while( (endTime.getTime() - startTime.getTime()) > 0 ){
+						startTime.setDate(startTime.getDate() + 1);
+						((time) => {
+							this.clickIndex.push({
+								y: time.getFullYear(),
+								m: time.getMonth(),
+								d: time.getDate()
+							});
+						})(startTime);
+					}
+					this.chooseDate.push(day);
 				}
-				
 			}
 		},
 		complete () {     //  点确认传递数据
@@ -212,7 +202,7 @@ export default {
 			this.chooseDate = [];
 			this.clickIndex = [];
 		},
-		calendarInit(year, month, x) {
+		calendarInit(year, month, x) {    // 初始化日期
 			let date, d;
 			let days = [];
 			if (year == null || month == null) {

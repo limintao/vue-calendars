@@ -1,7 +1,7 @@
 {
   "name": "vue-calendars",
-  "description": "A simple calendar selection component based on vue. Js!",
-  "version": "1.2.0",
+  "description": "A simple calendar selection component based on vue.Js!",
+  "version": "1.2.1",
   "author": "limintao",
   "main": "dist/vue-calendars.js",
   "license": "MIT",
@@ -35,7 +35,7 @@
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.9.1"
+    "webpack-dev-server": "^3.1.11"
   },
   "keywords": [
     "vue",

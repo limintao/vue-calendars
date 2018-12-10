@@ -52,18 +52,18 @@ or register locally in your .vue file
 <template>
   <div class="hello">
     <div class="chooseView" @click="openCalendar">
-        <span class="item">选择日期：</span>
-        <span class="result">开始时间：{{ selectDate[0] }}</span>
+      <span class="item">选择日期：</span>
+      <span class="result">开始时间：{{ selectDate[0] }}</span>
     </div>
     
     <v-calendar 
-        :option="option" 
-        :click-action="setSelectDate"
-        :multi-selection="isMultiple"
-        :interval-selection="isInterval"
-        :subscript="subscript"
-        :items-subscript="itemsSubscript"
-        ></v-calendar>
+      :option="option" 
+      :click-action="setSelectDate"
+      :multi-selection="isMultiple"
+      :interval-selection="isInterval"
+      :subscript="subscript"
+      :items-subscript="itemsSubscript"
+    />
     
   </div>
 </template>
