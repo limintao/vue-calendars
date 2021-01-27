@@ -73,38 +73,38 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-        option: {
-            open: false,  //是否打开日历📅；
-            aroud: 12, //显示多少月的数据
-            title: '选择出行日期'
+      option: {
+        open: false,  //是否打开日历📅；
+        aroud: 12, //显示多少月的数据
+        title: '选择出行日期'
+      },
+      selectDate: [],    //当前选择的日期
+      isMultiple: false, //是否多选，false单选、true多选
+      isInterval: true,   // 是否是区间选择
+      subscript: "可约",  //所有的日期下标标题
+      itemsSubscript:[    // 自定义哪天不可选和自定义标题
+        {
+          date: '2018-05-31',
+          title: '不可约',
         },
-        selectDate: [],    //当前选择的日期
-        isMultiple: false, //是否多选，false单选、true多选
-        isInterval: true,   // 是否是区间选择
-        subscript: "可约",  //所有的日期下标标题
-        itemsSubscript:[    // 自定义哪天不可选和自定义标题
-            {
-                date: '2018-05-31',
-                title: '不可休',
-            },
-            {
-                date: '2018/06/01',
-                title: '不可休',
-            },
-            {
-                date: '2018,06,22',
-                title: '不可休',
-            }
-        ]
+        {
+          date: '2018/06/01',
+          title: '不可约',
+        },
+        {
+          date: '2018,06,22',
+          title: '不可约',
+        }
+      ]
     }
   },
   
   methods:{
     openCalendar() {
-        this.option.open = true;
+      this.option.open = true;
     },
     setSelectDate(d) {   //设置点击的日期,返回的是一个数组
-        this.selectDate= d;
+      this.selectDate= d;
     }
   }
 }
