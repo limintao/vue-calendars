@@ -30,15 +30,15 @@ export default {
 			itemsSubscript:[
 				{
 					date: '2018-08-31',
-					title: '不可休',
+					title: '不可约',
 				},
 				{
 					date: '2018/09/01',
-					title: '不可休',
+					title: '不可约',
 				},
 				{
 					date: '2018,08,22',
-					title: '不可休',
+					title: '不可约',
 				}
 			]
     }
